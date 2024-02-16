@@ -5,7 +5,7 @@ export type WeatherDocument = Weather & mongoose.Document;
 
 @Schema()
 export class Weather {
-  @Prop()
+  @Prop({unique: true})
   location: string;
 
   @Prop({ type: mongoose.Schema.Types.Mixed })

@@ -1,27 +1,54 @@
-import { HttpStatus, HttpException, Injectable } from "@nestjs/common";
+import { HttpStatus, HttpException, Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
-import { ConfigService } from "@nestjs/config";
-import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
-import { Weather, WeatherDocument } from "./weather.schema";
+import { ConfigService } from '@nestjs/config';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Weather, WeatherDocument } from './weather.schema';
 
 @Injectable()
-export class WeatherService{
-  constructor(private httpService: HttpService,
+export class WeatherService {
+  private readonly apiKey: string;
+  constructor(
+    private httpService: HttpService,
     private configService: ConfigService,
-    @InjectModel(Weather.name) private weatherModel: Model<WeatherDocument>,) {}
-  async getWeather(location: string) {
-    const apiKey = this.configService.get<string>('WEATHER_API_KEY');
-    if (!apiKey) {
-      throw new HttpException('API key for WeatherAPI is missing', HttpStatus.INTERNAL_SERVER_ERROR);
+    @InjectModel(Weather.name) private weatherModel: Model<WeatherDocument>,
+  ) {
+    const key = this.configService.get<string>('WEATHER_API_KEY');
+    if (!key) {
+      throw new HttpException(
+        'API key for WeatherAPI is missing',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
-    const result =  await this.httpService.axiosRef
-    .get(`https://api.weatherapi.com/v1/current.json?q=${location}&key=${apiKey}`)
-
-
-    const createdWeather = new this.weatherModel({location: location, data: result.data});
-    await createdWeather.save();
-
-    return createdWeather;
+    this.apiKey = key;
+  }
+  async getWeather(location: string) {
+    try {
+      let weather = await this.weatherModel.findOne({ location }).exec();
+      if (!weather) {
+        const weatherData = await this.fetchWeatherFromAPI(location);
+        if (weatherData) {
+          const createdWeather = new this.weatherModel({
+            location: location,
+            data: weatherData,
+          });
+          await createdWeather.save();
+          weather = createdWeather;
+        }
+      }
+      return weather;
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+  private async fetchWeatherFromAPI(location: string) {
+    try {
+      const result = await this.httpService.axiosRef.get(
+        `https://api.weatherapi.com/v1/current.json?q=${location}&key=${this.apiKey}`,
+      );
+      return result.data;
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 }
