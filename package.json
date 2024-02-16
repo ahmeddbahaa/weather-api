@@ -1,8 +1,8 @@
 {
   "name": "weather-api",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "simple weather api using nestjs and weather api",
+  "author": "ahmedd bahaa",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {

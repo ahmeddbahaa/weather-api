@@ -1,73 +1,104 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Simple Weather Service Api 👋
+Welcome to the Simple Apartment Listing App!
+This repository contains the backend, frontend, and mobile application components of My Application.
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Backend (NestJS)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+### Description
 
-## Description
+This is a NestJS application that provides weather data based on location. The application has one endpoint `/weather?location=` which fetches weather data for the provided location. 
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+The application uses MongoDB to store weather data, with location as a unique identifier. It also utilizes an in-memory cache to read data that is initialized at the start of the application and fetches all data from the database.
 
-## Installation
+
+the application follows the modular structure recommended by NestJS. It uses decorators, modules, dependency injection, pipes, and exception filters as prescribed in the NestJS documentation.
+
+## API Reference
+
+#### Get Weather Data for given Location
+
+```http
+  GET /api/v1/weather?location
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `location`| `string` | **Required**. Your Weather Location |
+
+## Run Locally 
+**Don't forget to add .env file check Environment Variables Section:**
+
+### Installation
 
 ```bash
 $ npm install
 ```
-
-## Running the app
-
+### Start the APP
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+$ npm start 
 ```
-
-## Test
-
+### Run Tests
 ```bash
-# unit tests
 $ npm run test
+```
+## Environment Variables
 
-# e2e tests
-$ npm run test:e2e
+To run this project, you will need to add the following environment variables to your .env file
+`WEATHER_API_KEY`
+`DB_USERNAME`
+`DB_PASSWORD`
 
-# test coverage
-$ npm run test:cov
+I have Include .envExample that has values that you can use to run the app
+
+# Simple Weather Service Api 👋
+Welcome to the Simple Apartment Listing App!
+This repository contains the backend, frontend, and mobile application components of My Application.
+
+## Backend (NestJS)
+
+### Description
+
+This is a NestJS application that provides weather data based on location. The application has one endpoint `/weather?location=` which fetches weather data for the provided location. 
+
+The application uses MongoDB to store weather data, with location as a unique identifier. It also utilizes an in-memory cache to read data that is initialized at the start of the application and fetches all data from the database.
+
+
+the application follows the modular structure recommended by NestJS. It uses decorators, modules, dependency injection, pipes, and exception filters as prescribed in the NestJS documentation.
+
+## API Reference
+
+#### Get Weather Data for given Location
+
+```http
+  GET /api/v1/weather?location
 ```
 
-## Support
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `location`| `string` | **Required**. Your Weather Location |
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## Run Locally 
+**Don't forget to add .env file check Environment Variables Section:**
 
-## Stay in touch
+### Installation
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```bash
+$ npm install
+```
+### Start the APP
+```bash
+$ npm start 
+```
+### Run Tests
+```bash
+$ npm run test
+```
+## Environment Variables
 
-## License
+To run this project, you will need to add the following environment variables to your .env file
+`WEATHER_API_KEY`
+`DB_USERNAME`
+`DB_PASSWORD`
 
-Nest is [MIT licensed](LICENSE).
+I have Include .envExample that has values that you can use to run the app
+
