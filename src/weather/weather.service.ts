@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Weather, WeatherDocument } from './weather.schema';
+import { MemoryCacheManager } from './weather.cache';
 
 @Injectable()
 export class WeatherService {
@@ -11,6 +12,7 @@ export class WeatherService {
   constructor(
     private httpService: HttpService,
     private configService: ConfigService,
+    private cacheManager: MemoryCacheManager,
     @InjectModel(Weather.name) private weatherModel: Model<WeatherDocument>,
   ) {
     const key = this.configService.get<string>('WEATHER_API_KEY');
@@ -24,7 +26,8 @@ export class WeatherService {
   }
   async getWeather(location: string) {
     try {
-      let weather = await this.weatherModel.findOne({ location }).exec();
+      let weather = await this.cacheManager.get(location);
+
       if (!weather) {
         const weatherData = await this.fetchWeatherFromAPI(location);
         if (weatherData) {
@@ -33,6 +36,7 @@ export class WeatherService {
             data: weatherData,
           });
           await createdWeather.save();
+          await this.cacheManager.set(location, createdWeather);
           weather = createdWeather;
         }
       }
