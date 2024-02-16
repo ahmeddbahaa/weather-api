@@ -1,13 +1,15 @@
-import { HttpStatus, HttpException, Injectable } from '@nestjs/common';
+import { HttpStatus, HttpException, Injectable, Logger } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Weather, WeatherDocument } from './weather.schema';
 import { MemoryCacheManager } from './weather.cache';
+import { AppError, ErrorType } from '../utils/app.error';
 
 @Injectable()
 export class WeatherService {
+  private readonly logger = new Logger(WeatherService.name);
   private readonly apiKey: string;
   constructor(
     private httpService: HttpService,
@@ -42,7 +44,18 @@ export class WeatherService {
       }
       return weather;
     } catch (error) {
-      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+      this.logger.error(error);
+      if (error instanceof AppError) {
+        throw new HttpException(error, HttpStatus.BAD_REQUEST);
+      }
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: 'Internal Server Error',
+          message: 'An unexpected error occurred',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
   private async fetchWeatherFromAPI(location: string) {
@@ -52,7 +65,11 @@ export class WeatherService {
       );
       return result.data;
     } catch (error) {
-      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new AppError(
+        'Invalid location provided',
+        HttpStatus.BAD_REQUEST,
+        ErrorType.INVALID_INPUT,
+      );
     }
   }
 }
