@@ -13,4 +13,5 @@ export class AppError extends Error {
 export enum ErrorType {
   INVALID_INPUT = 'InvalidInputError',
   MODEL_ERROR = 'ModelValidationError',
+  INTERNAL_ERROR = 'InternalError',
 }

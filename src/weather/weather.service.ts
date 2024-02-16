@@ -17,14 +17,7 @@ export class WeatherService {
     private cacheManager: MemoryCacheManager,
     @InjectModel(Weather.name) private weatherModel: Model<WeatherDocument>,
   ) {
-    const key = this.configService.get<string>('WEATHER_API_KEY');
-    if (!key) {
-      throw new HttpException(
-        'API key for WeatherAPI is missing',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
-    this.apiKey = key;
+    this.apiKey = this.configService.get<string>('WEATHER_API_KEY') as string;
   }
   async getWeather(location: string) {
     try {
